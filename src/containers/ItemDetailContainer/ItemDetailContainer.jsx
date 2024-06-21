@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
+import { CartContext } from '../../context/CartContext';
 
 
 const ItemDetailContainer = () => {
@@ -7,7 +9,7 @@ const ItemDetailContainer = () => {
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
-
+    const { agregarAlCarrito } = useContext(CartContext)
    
     
 
@@ -41,7 +43,8 @@ const ItemDetailContainer = () => {
       <p>{product.description}</p>
       <p><strong>${product.price}</strong></p>
       <img src={product.image} alt={product.title} style={{ width: '200px', height: 'auto' }} />
-    </div>
+      <button onClick={() => agregarAlCarrito(product)}>Agregar al carrito</button>
+      </div>
   )
 }
 

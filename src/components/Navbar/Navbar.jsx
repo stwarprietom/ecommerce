@@ -16,21 +16,21 @@ const Menu = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
           
-          <Link to={'/category/electronics'}>
-            <Nav.Link href="#link">Electronicos</Nav.Link>
+          <Link to={'/category/adidas'}>
+            <Nav.Link href="#link">Adidas</Nav.Link>
           </Link>
-            <Link to={'/category/jewelery'}>
-            <Nav.Link href="#link">Joyas</Nav.Link>
+            <Link to={'/category/nike'}>
+            <Nav.Link href="#link">Nike</Nav.Link>
             </Link>
-            <Link to={'/Contacto'}>
-              <Nav.Link href="#link">Contacto</Nav.Link>    
-              </Link>   
+            
             <NavDropdown title="Varios" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Ascis</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Puma</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Reebok</NavDropdown.Item>  
-                   
-            </NavDropdown>
+            <NavDropdown.Item as={Link} to="/category/ascis">Ascis</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/category/puma">Puma</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/category/reebok">Reebok</NavDropdown.Item>
+          </NavDropdown>
+            <Link to={'/Contacto'}>
+            <Nav.Link href="#link">Contacto</Nav.Link>    
+            </Link>  
           </Nav>          
           <CartWidget/>
          </Navbar.Collapse>

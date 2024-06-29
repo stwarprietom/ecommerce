@@ -1,51 +1,54 @@
-import React, { useEffect, useState } from 'react'
-import { useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'
-import { CartContext } from '../../context/CartContext';
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { CartContext } from '../../context/CartContext'; 
+import { doc, getDoc } from 'firebase/firestore'; 
+import { db } from '../../firebase/client'
 
 
 const ItemDetailContainer = () => {
+  const { id } = useParams();
+  const { agregarAlCarrito } = useContext(CartContext); 
+  const [producto, setProducto] = useState(null);
+  useEffect(() => {
+    const obtenerProducto = async () => {
+      try {
+        const productoRef = doc(db, 'productos', id);
+        const productoSnap = await getDoc(productoRef);
 
-    const [product, setProduct] = useState(null);
-    const { id } = useParams();
-    const [loading, setLoading] = useState(true);
-    const { agregarAlCarrito } = useContext(CartContext)
-   
-    
-
-    useEffect(() => {  
-     
-
-      fetch(`https://fakestoreapi.com/products/${id}`)
-      .then(respuesta=> {
-        if (!respuesta.ok) {
-          console.error("error")
+        if (productoSnap.exists()) {
+          setProducto({ id: productoSnap.id, ...productoSnap.data() });
+        } else {
+          console.log('El producto no existe');
         }
-        return respuesta.json();
-      })
+      } catch (error) {
+        console.error('Error obteniendo el producto:', error);
+      }
+    };
 
-      .then(dato => {
-        setProduct(dato);
-        setLoading(false);
-      })
+    obtenerProducto();
+  }, [id]);
 
-      
-    
-      }, [id])
+  const handleAgregarAlCarrito = () => {
+    if (producto) {
+      agregarAlCarrito(producto); 
+    }
+  };
 
-      if (loading) return <p>Loading...</p>;
-
-        
+  if (!producto) {
+    return <div>Cargando...</div>;
+  }
 
   return (
     <div>
-      <h1>{product.title}</h1>
-      <p>{product.description}</p>
-      <p><strong>${product.price}</strong></p>
-      <img src={product.image} alt={product.title} style={{ width: '200px', height: 'auto' }} />
-      <button onClick={() => agregarAlCarrito(product)}>Agregar al carrito</button>
-      </div>
-  )
-}
+      <h2>{producto.nombre}</h2>
+      <img src={producto.imagen} alt={producto.nombre} style={{ width: '170px', height: 'auto' }} />
+      <p>Categoría: {producto.categoria}</p>
+      <p>Precio: ${producto.precio}</p>
+      <p>Stock: {producto.stock}</p>
+      <p>Descripción: {producto.descripcion}</p>
+      <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button>
+    </div>
+  );
+};
 
-export default ItemDetailContainer
+export default ItemDetailContainer;
